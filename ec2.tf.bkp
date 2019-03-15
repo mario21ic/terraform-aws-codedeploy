@@ -1,0 +1,62 @@
+data "aws_ami" "draft" {
+  most_recent = true
+
+  filter {
+    name   = "name"
+    values = ["draft_codedeploy"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+}
+
+resource "aws_instance" "ec2_draft" {
+  ami                    = "${data.aws_ami.draft.id}"
+  instance_type          = "t2.nano"
+  key_name               = "yarkan_ireland"
+  vpc_security_group_ids = ["${aws_security_group.sg_draft.id}"]
+  associate_public_ip_address = true
+  iam_instance_profile = "${aws_iam_instance_profile.instance_profile.id}"
+
+  count = 3
+
+  tags {
+    Name        = "DraftDeploy"
+    Description = "Server application"
+  }
+}
+
+resource "aws_security_group" "sg_draft" {
+  name        = "sg_draft"
+  description = "Server application inbound and outbound"
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["181.224.236.154/32"]
+  }
+
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags {
+    Name        = "sg_backend_public"
+    Class       = "sg_backend_public"
+    Enviroment  = "${var.environment}"
+    Description = "Server application security group"
+  }
+}
