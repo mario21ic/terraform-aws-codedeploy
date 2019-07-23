@@ -19,6 +19,6 @@ variable "ec2_filter_value" {
   description = "Name"
 }
 
-variable "trigger_sns_arn" {
-  description = "SNS Lambda arn"
-}
+//variable "trigger_sns_arn" {
+//  description = "SNS Lambda arn"
+//}
