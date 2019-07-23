@@ -24,11 +24,11 @@ resource "aws_codedeploy_deployment_group" "cd_app_group" {
     value = "${var.ec2_filter_value}"
   }
 
-  trigger_configuration {
-    trigger_name       = "trigger_sns_topic"
-    trigger_events     = ["DeploymentSuccess", "DeploymentFailure", "DeploymentStop", "DeploymentRollback"]
-    trigger_target_arn = "${var.trigger_sns_arn}"
-  }
+  //trigger_configuration {
+  //  trigger_name       = "trigger_sns_topic"
+  //  trigger_events     = ["DeploymentSuccess", "DeploymentFailure", "DeploymentStop", "DeploymentRollback"]
+  //  trigger_target_arn = "${var.trigger_sns_arn}"
+  //}
 
   auto_rollback_configuration {
     enabled = true
